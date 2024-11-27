@@ -1,0 +1,112 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import Header from '../../../components/Header.astro';
+import Footer from '../../../components/Footer.astro';
+import { strains } from '../../../data/strains';
+
+export function getStaticPaths() {
+  return strains.map(strain => ({
+    params: { strain: strain.name.toLowerCase().replace(/\s+/g, '-') },
+    props: { strain }
+  }));
+}
+
+const { strain } = Astro.props;
+
+const positiveEffects = Object.entries(strain.effects.positive)
+  .sort(([,a], [,b]) => b - a);
+const negativeEffects = Object.entries(strain.effects.negative)
+  .sort(([,a], [,b]) => b - a);
+const medicalEffects = Object.entries(strain.effects.medical)
+  .sort(([,a], [,b]) => b - a);
+---
+
+<Layout title={`${strain.name} Effects and Benefits Guide - CannaGuide`}>
+  <Header />
+  
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div class="grid md:grid-cols-2 gap-12">
+      <div class="md:sticky md:top-8 h-fit">
+        <div class="relative rounded-lg overflow-hidden shadow-[0_8px_25px_rgba(75,175,100,0.25)]">
+          <div class="absolute inset-0 bg-gradient-to-t from-primary-500/20 to-transparent"></div>
+          <img 
+            src={strain.img_url || '/placeholder.png'} 
+            alt={strain.name}
+            class="w-full h-[500px] object-cover"
+          />
+        </div>
+      </div>
+
+      <div class="space-y-8">
+        <div>
+          <h1 class="text-4xl font-bold text-gray-900 mb-4">{strain.name} Effects</h1>
+          <p class="text-xl text-gray-600 mb-8">{strain.description}</p>
+
+          <div class="space-y-8">
+            <div class="bg-white rounded-lg shadow-lg p-8">
+              <h2 class="text-2xl font-bold text-gray-900 mb-6">Primary Effects</h2>
+              <div class="space-y-4">
+                {positiveEffects.map(([effect, percentage]) => (
+                  <div class="relative">
+                    <div class="flex justify-between mb-2">
+                      <span class="text-lg font-medium text-gray-700 capitalize">{effect}</span>
+                      <span class="text-primary-600 font-semibold">{percentage}%</span>
+                    </div>
+                    <div class="h-2 bg-primary-100 rounded-full overflow-hidden">
+                      <div 
+                        class="h-full bg-primary-500 rounded-full transition-all duration-500"
+                        style={`width: ${percentage}%`}
+                      ></div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div class="bg-white rounded-lg shadow-lg p-8">
+              <h2 class="text-2xl font-bold text-gray-900 mb-6">Medical Benefits</h2>
+              <div class="space-y-4">
+                {medicalEffects.map(([effect, percentage]) => (
+                  <div class="relative">
+                    <div class="flex justify-between mb-2">
+                      <span class="text-lg font-medium text-gray-700 capitalize">{effect.replace(/_/g, ' ')}</span>
+                      <span class="text-primary-600 font-semibold">{percentage}%</span>
+                    </div>
+                    <div class="h-2 bg-primary-100 rounded-full overflow-hidden">
+                      <div 
+                        class="h-full bg-primary-500 rounded-full transition-all duration-500"
+                        style={`width: ${percentage}%`}
+                      ></div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div class="bg-white rounded-lg shadow-lg p-8">
+              <h2 class="text-2xl font-bold text-gray-900 mb-6">Potential Side Effects</h2>
+              <div class="space-y-4">
+                {negativeEffects.map(([effect, percentage]) => (
+                  <div class="relative">
+                    <div class="flex justify-between mb-2">
+                      <span class="text-lg font-medium text-gray-700 capitalize">{effect.replace(/_/g, ' ')}</span>
+                      <span class="text-primary-600 font-semibold">{percentage}%</span>
+                    </div>
+                    <div class="h-2 bg-primary-100 rounded-full overflow-hidden">
+                      <div 
+                        class="h-full bg-primary-500 rounded-full transition-all duration-500"
+                        style={`width: ${percentage}%`}
+                      ></div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <Footer />
+</Layout>

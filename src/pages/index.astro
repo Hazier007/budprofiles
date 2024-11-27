@@ -1,0 +1,50 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import HeroSection from '../components/HeroSection.astro';
+import StrainGrid from '../components/StrainGrid.astro';
+import { strains } from '../data/strains';
+
+const seoDescription = "Discover your perfect cannabis strain at Budprofiles.com. Explore our comprehensive database of cannabis strains, effects, and medical benefits. Find detailed information about THC levels, terpenes, and user experiences.";
+---
+
+<Layout 
+  title="Cannabis Strain Guide & Information Database" 
+  description={seoDescription}
+  canonicalUrl="https://budprofiles.com"
+>
+  <Header />
+  <HeroSection />
+  
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <section class="mb-16">
+      <h2 class="text-3xl font-bold text-gray-900 mb-8">Popular Cannabis Strains</h2>
+      <StrainGrid strains={strains.slice(0, 3)} />
+    </section>
+
+    <section class="mb-16">
+      <h2 class="text-3xl font-bold text-gray-900 mb-6">Explore by Effect</h2>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        {['Relaxed', 'Happy', 'Euphoric', 'Pain Relief'].map(effect => (
+          <a href={`/effects/${effect.toLowerCase()}`} class="bg-white rounded-lg shadow-sm p-6 text-center hover:shadow-md transition-shadow">
+            <h3 class="text-lg font-semibold text-gray-900">{effect}</h3>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <section>
+      <h2 class="text-3xl font-bold text-gray-900 mb-6">Medical Benefits</h2>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        {['Stress', 'Pain', 'Anxiety', 'Insomnia'].map(condition => (
+          <a href={`/medical/${condition.toLowerCase()}`} class="bg-white rounded-lg shadow-sm p-6 text-center hover:shadow-md transition-shadow">
+            <h3 class="text-lg font-semibold text-gray-900">{condition}</h3>
+          </a>
+        ))}
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</Layout>

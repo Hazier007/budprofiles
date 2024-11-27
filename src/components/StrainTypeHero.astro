@@ -1,0 +1,41 @@
+---
+interface Props {
+  type: 'Indica' | 'Sativa' | 'Hybrid';
+}
+
+const { type } = Astro.props;
+
+const typeInfo = {
+  Indica: {
+    description: 'Known for their relaxing and sedating effects, Indica strains are perfect for evening use and deep relaxation.',
+    characteristics: ['Relaxing body effects', 'May help with sleep', 'Often used for pain relief'],
+  },
+  Sativa: {
+    description: 'Energizing and uplifting, Sativa strains are ideal for daytime use and creative activities.',
+    characteristics: ['Energizing mental effects', 'May boost creativity', 'Often used for daytime activities'],
+  },
+  Hybrid: {
+    description: 'Offering balanced effects, Hybrid strains combine the best qualities of both Indica and Sativa.',
+    characteristics: ['Balanced effects', 'Versatile benefits', 'Best of both worlds'],
+  }
+};
+---
+
+<section class="bg-gradient-to-br from-primary-600 to-primary-800 py-20 relative overflow-hidden">
+  <div class="absolute inset-0 bg-black opacity-20"></div>
+  <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center">
+      <h1 class="text-4xl md:text-5xl font-bold text-white mb-8">{type} Strains</h1>
+      <p class="text-xl text-white/90 mb-12 max-w-3xl mx-auto">
+        {typeInfo[type].description}
+      </p>
+      <div class="flex flex-wrap justify-center gap-4">
+        {typeInfo[type].characteristics.map(characteristic => (
+          <span class="bg-white/10 backdrop-blur-sm text-white px-4 py-2 rounded-full">
+            {characteristic}
+          </span>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>

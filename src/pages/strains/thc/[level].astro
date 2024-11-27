@@ -1,0 +1,50 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import Header from '../../../components/Header.astro';
+import Footer from '../../../components/Footer.astro';
+import StrainGrid from '../../../components/StrainGrid.astro';
+import { strains } from '../../../data/strains';
+
+export function getStaticPaths() {
+  const levels = ['low', 'medium', 'high'];
+  return levels.map(level => ({
+    params: { level },
+    props: { 
+      level,
+      filteredStrains: strains.filter(strain => {
+        const thc = parseInt(strain.thc_level);
+        if (level === 'low') return thc < 15;
+        if (level === 'medium') return thc >= 15 && thc < 20;
+        return thc >= 20;
+      })
+    },
+  }));
+}
+
+const { level, filteredStrains } = Astro.props;
+
+const levelDescriptions = {
+  low: 'Perfect for beginners or those seeking mild effects',
+  medium: 'Balanced potency for experienced users',
+  high: 'High-potency strains for seasoned consumers'
+};
+---
+
+<Layout title={`${level.charAt(0).toUpperCase() + level.slice(1)} THC Cannabis Strains - CannaGuide`}>
+  <Header />
+  
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div class="text-center mb-12">
+      <h1 class="text-4xl font-bold text-gray-900 mb-4">
+        {level.charAt(0).toUpperCase() + level.slice(1)} THC Strains
+      </h1>
+      <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+        {levelDescriptions[level]}
+      </p>
+    </div>
+
+    <StrainGrid strains={filteredStrains} />
+  </main>
+
+  <Footer />
+</Layout>

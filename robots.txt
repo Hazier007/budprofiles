@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://budprofiles.com/sitemap.xml
+
+# Optimize crawling
+Crawl-delay: 1

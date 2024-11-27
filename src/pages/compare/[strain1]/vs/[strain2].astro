@@ -1,0 +1,153 @@
+---
+import Layout from '../../../../layouts/Layout.astro';
+import Header from '../../../../components/Header.astro';
+import Footer from '../../../../components/Footer.astro';
+import ComparisonTable from '../../../../components/ComparisonTable.astro';
+import { strains } from '../../../../data/strains';
+
+export async function getStaticPaths() {
+  const paths = [];
+  
+  for (let i = 0; i < strains.length; i++) {
+    for (let j = i + 1; j < strains.length; j++) {
+      paths.push({
+        params: {
+          strain1: strains[i].name.toLowerCase().replace(/\s+/g, '-'),
+          strain2: strains[j].name.toLowerCase().replace(/\s+/g, '-')
+        },
+        props: {
+          strain1: strains[i],
+          strain2: strains[j]
+        }
+      });
+    }
+  }
+  
+  return paths;
+}
+
+const { strain1, strain2 } = Astro.props;
+
+const seoDescription = `Compare ${strain1.name} vs ${strain2.name}: THC levels, effects, medical benefits, and more. Find out which strain better suits your needs.`;
+---
+
+<Layout title={`${strain1.name} vs ${strain2.name} Comparison - CannaGuide`}>
+  <Header />
+  
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div class="text-center mb-12">
+      <h1 class="text-4xl font-bold text-gray-900 mb-6">
+        <span class="relative">
+          {strain1.name}
+          <div class="absolute -bottom-2 left-0 w-full h-1 bg-gradient-to-r from-primary-500 to-transparent"></div>
+        </span>
+        <span class="mx-4 text-primary-500">vs</span>
+        <span class="relative">
+          {strain2.name}
+          <div class="absolute -bottom-2 left-0 w-full h-1 bg-gradient-to-r from-transparent to-primary-500"></div>
+        </span>
+      </h1>
+      <p class="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
+        {seoDescription}
+      </p>
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-8 mb-12">
+      <div class="group">
+        <div class="relative rounded-lg overflow-hidden shadow-[0_8px_25px_rgba(75,175,100,0.25)] transform transition-all duration-300 group-hover:scale-105">
+          <div class="absolute inset-0 bg-gradient-to-t from-primary-500/20 to-transparent"></div>
+          <img 
+            src={strain1.img_url || '/placeholder.png'} 
+            alt={strain1.name}
+            class="w-full h-[400px] object-cover"
+          />
+          <div class="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/80 to-transparent">
+            <h3 class="text-2xl font-bold text-white mb-2">{strain1.name}</h3>
+            <p class="text-white/90">{strain1.type}</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="group">
+        <div class="relative rounded-lg overflow-hidden shadow-[0_8px_25px_rgba(75,175,100,0.25)] transform transition-all duration-300 group-hover:scale-105">
+          <div class="absolute inset-0 bg-gradient-to-t from-primary-500/20 to-transparent"></div>
+          <img 
+            src={strain2.img_url || '/placeholder.png'} 
+            alt={strain2.name}
+            class="w-full h-[400px] object-cover"
+          />
+          <div class="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/80 to-transparent">
+            <h3 class="text-2xl font-bold text-white mb-2">{strain2.name}</h3>
+            <p class="text-white/90">{strain2.type}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-12 space-y-8">
+      <div class="grid md:grid-cols-2 gap-8">
+        <div class="space-y-6">
+          <div class="bg-white rounded-lg shadow-lg p-6">
+            <h2 class="text-2xl font-bold text-gray-900 mb-4">About {strain1.name}</h2>
+            <p class="text-gray-600 leading-relaxed mb-6">{strain1.description}</p>
+          </div>
+          
+          <div class="bg-primary-50 rounded-lg p-6 shadow-lg transform hover:scale-102 transition-transform duration-300">
+            <div class="grid grid-cols-2 gap-4">
+              <div class="text-center p-4 bg-white rounded-lg shadow-sm">
+                <span class="block text-primary-700 font-medium mb-2">THC Level</span>
+                <span class="block text-2xl font-bold text-primary-600">{strain1.thc_level}</span>
+              </div>
+              <div class="text-center p-4 bg-white rounded-lg shadow-sm">
+                <span class="block text-primary-700 font-medium mb-2">Dominant Terpene</span>
+                <span class="block text-2xl font-bold text-primary-600">{strain1.most_common_terpene}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="space-y-6">
+          <div class="bg-white rounded-lg shadow-lg p-6">
+            <h2 class="text-2xl font-bold text-gray-900 mb-4">About {strain2.name}</h2>
+            <p class="text-gray-600 leading-relaxed mb-6">{strain2.description}</p>
+          </div>
+          
+          <div class="bg-primary-50 rounded-lg p-6 shadow-lg transform hover:scale-102 transition-transform duration-300">
+            <div class="grid grid-cols-2 gap-4">
+              <div class="text-center p-4 bg-white rounded-lg shadow-sm">
+                <span class="block text-primary-700 font-medium mb-2">THC Level</span>
+                <span class="block text-2xl font-bold text-primary-600">{strain2.thc_level}</span>
+              </div>
+              <div class="text-center p-4 bg-white rounded-lg shadow-sm">
+                <span class="block text-primary-700 font-medium mb-2">Dominant Terpene</span>
+                <span class="block text-2xl font-bold text-primary-600">{strain2.most_common_terpene}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-12">
+      <ComparisonTable strain1={strain1} strain2={strain2} />
+    </div>
+  </main>
+
+  <Footer />
+</Layout>
+
+<style>
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+  }
+
+  .group:hover img {
+    transform: scale(1.1);
+    transition: transform 0.6s ease-in-out;
+  }
+
+  .hover\:scale-102:hover {
+    transform: scale(1.02);
+  }
+</style>

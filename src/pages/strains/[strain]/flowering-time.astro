@@ -1,0 +1,129 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import Header from '../../../components/Header.astro';
+import Footer from '../../../components/Footer.astro';
+import { strains } from '../../../data/strains';
+
+export function getStaticPaths() {
+  return strains.map(strain => ({
+    params: { strain: strain.name.toLowerCase().replace(/\s+/g, '-') },
+    props: { strain }
+  }));
+}
+
+const { strain } = Astro.props;
+
+// Estimated flowering times based on strain type
+const floweringTime = strain.type === 'Indica' ? '8-9 weeks' : 
+                     strain.type === 'Sativa' ? '10-12 weeks' : 
+                     '9-10 weeks';
+
+const growthPhases = [
+  { name: 'Seedling', duration: '2-3 weeks', description: 'Initial growth phase where the first leaves develop' },
+  { name: 'Vegetative', duration: '3-16 weeks', description: 'Main growth phase where the plant develops its structure' },
+  { name: 'Flowering', duration: floweringTime, description: 'Final phase where buds develop and mature' }
+];
+---
+
+<Layout title={`${strain.name} Flowering Time and Growth Cycle - CannaGuide`}>
+  <Header />
+  
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div class="grid md:grid-cols-2 gap-12">
+      <div class="md:sticky md:top-8 h-fit">
+        <div class="relative rounded-lg overflow-hidden shadow-[0_8px_25px_rgba(75,175,100,0.25)]">
+          <div class="absolute inset-0 bg-gradient-to-t from-primary-500/20 to-transparent"></div>
+          <img 
+            src={strain.img_url || '/placeholder.png'} 
+            alt={strain.name}
+            class="w-full h-[500px] object-cover"
+          />
+        </div>
+      </div>
+
+      <div class="space-y-8">
+        <div>
+          <h1 class="text-4xl font-bold text-gray-900 mb-4">{strain.name} Flowering Time</h1>
+          <p class="text-xl text-gray-600 mb-8">Complete growth cycle and flowering period guide</p>
+
+          <div class="space-y-6">
+            <div class="bg-white rounded-lg shadow-lg p-8">
+              <h2 class="text-2xl font-bold text-gray-900 mb-6">Growth Timeline</h2>
+              <div class="relative">
+                {growthPhases.map((phase, index) => (
+                  <div class="flex mb-8 last:mb-0">
+                    <div class="flex-shrink-0 w-12 h-12 bg-primary-100 rounded-full flex items-center justify-center relative">
+                      <span class="text-primary-600 font-bold">{index + 1}</span>
+                      {index !== growthPhases.length - 1 && (
+                        <div class="absolute w-0.5 bg-primary-200 h-full top-12 left-1/2 transform -translate-x-1/2"></div>
+                      )}
+                    </div>
+                    <div class="ml-6">
+                      <h3 class="text-lg font-semibold text-gray-900">{phase.name} Phase</h3>
+                      <p class="text-primary-600 font-medium mb-2">{phase.duration}</p>
+                      <p class="text-gray-600">{phase.description}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div class="bg-white rounded-lg shadow-lg p-8">
+              <h2 class="text-2xl font-bold text-gray-900 mb-4">Flowering Period</h2>
+              <div class="prose max-w-none text-gray-600">
+                <p class="mb-4">
+                  {strain.name}, being a {strain.type.toLowerCase()} strain, typically flowers for {floweringTime}. 
+                  This period is crucial for developing the strain's signature characteristics:
+                </p>
+                <ul class="list-disc pl-6 space-y-2">
+                  <li>THC Development: Reaches {strain.thc_level}</li>
+                  <li>Terpene Profile: Primary terpene is {strain.most_common_terpene}</li>
+                  <li>Bud Structure: {strain.type === 'Indica' ? 'Dense and compact' : 
+                                   strain.type === 'Sativa' ? 'More airy and elongated' : 
+                                   'Balanced characteristics'}</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="bg-white rounded-lg shadow-lg p-8">
+              <h2 class="text-2xl font-bold text-gray-900 mb-4">Harvest Indicators</h2>
+              <div class="space-y-4">
+                <div class="flex items-center gap-4 p-4 bg-primary-50 rounded-lg">
+                  <div class="flex-shrink-0">
+                    <svg class="w-6 h-6 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                  </div>
+                  <div>
+                    <h3 class="font-medium text-gray-900">Trichome Color</h3>
+                    <p class="text-sm text-gray-600">Monitor trichomes turning from clear to milky white</p>
+                  </div>
+                </div>
+                <div class="flex items-center gap-4 p-4 bg-primary-50 rounded-lg">
+                  <div class="flex-shrink-0">
+                    <svg class="w-6 h-6 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                  </div>
+                  <div>
+                    <h3 class="font-medium text-gray-900">Pistil Color</h3>
+                    <p class="text-sm text-gray-600">Watch for pistils changing from white to orange/brown</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <Footer />
+</Layout>
+
+<style>
+  .prose ul {
+    list-style-type: disc;
+    padding-left: 1.5rem;
+  }
+</style>

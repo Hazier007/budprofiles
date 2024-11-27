@@ -1,0 +1,129 @@
+---
+import { Filter, SortAsc } from 'lucide-astro';
+
+interface Props {
+  activeType?: string;
+  activeTerpene?: string;
+  activeSort?: string;
+  types: string[];
+  terpenes: string[];
+}
+
+const { activeType, activeTerpene, activeSort, types, terpenes } = Astro.props;
+
+const sortOptions = [
+  { value: 'name-asc', label: 'Name (A-Z)' },
+  { value: 'name-desc', label: 'Name (Z-A)' },
+  { value: 'thc-high', label: 'THC (Highest)' },
+  { value: 'thc-low', label: 'THC (Lowest)' },
+];
+---
+
+<div class="bg-white rounded-xl shadow-lg p-6 mb-8">
+  <div class="flex flex-col md:flex-row gap-6">
+    <!-- Type Filter -->
+    <div class="flex-1">
+      <label class="block text-sm font-medium text-gray-700 mb-2">
+        <div class="flex items-center gap-2">
+          <Filter class="w-4 h-4" />
+          Filter by Type
+        </div>
+      </label>
+      <select
+        id="type-filter"
+        class="w-full rounded-lg border-gray-300 focus:border-primary-500 focus:ring-primary-500"
+      >
+        <option value="">All Types</option>
+        {types.map(type => (
+          <option value={type} selected={type === activeType}>{type}</option>
+        ))}
+      </select>
+    </div>
+
+    <!-- Terpene Filter -->
+    <div class="flex-1">
+      <label class="block text-sm font-medium text-gray-700 mb-2">
+        <div class="flex items-center gap-2">
+          <Filter class="w-4 h-4" />
+          Filter by Terpene
+        </div>
+      </label>
+      <select
+        id="terpene-filter"
+        class="w-full rounded-lg border-gray-300 focus:border-primary-500 focus:ring-primary-500"
+      >
+        <option value="">All Terpenes</option>
+        {terpenes.map(terpene => (
+          <option value={terpene} selected={terpene === activeTerpene}>{terpene}</option>
+        ))}
+      </select>
+    </div>
+
+    <!-- Sort -->
+    <div class="flex-1">
+      <label class="block text-sm font-medium text-gray-700 mb-2">
+        <div class="flex items-center gap-2">
+          <SortAsc class="w-4 h-4" />
+          Sort by
+        </div>
+      </label>
+      <select
+        id="sort-order"
+        class="w-full rounded-lg border-gray-300 focus:border-primary-500 focus:ring-primary-500"
+      >
+        {sortOptions.map(option => (
+          <option value={option.value} selected={option.value === activeSort}>
+            {option.label}
+          </option>
+        ))}
+      </select>
+    </div>
+  </div>
+</div>
+
+<script>
+  function updateURL(params: URLSearchParams) {
+    const newUrl = `${window.location.pathname}?${params.toString()}`;
+    window.history.pushState({ path: newUrl }, '', newUrl);
+    window.location.reload();
+  }
+
+  // Type Filter
+  const typeFilter = document.getElementById('type-filter') as HTMLSelectElement;
+  typeFilter?.addEventListener('change', (e) => {
+    const params = new URLSearchParams(window.location.search);
+    const value = (e.target as HTMLSelectElement).value;
+    if (value) {
+      params.set('type', value);
+    } else {
+      params.delete('type');
+    }
+    updateURL(params);
+  });
+
+  // Terpene Filter
+  const terpeneFilter = document.getElementById('terpene-filter') as HTMLSelectElement;
+  terpeneFilter?.addEventListener('change', (e) => {
+    const params = new URLSearchParams(window.location.search);
+    const value = (e.target as HTMLSelectElement).value;
+    if (value) {
+      params.set('terpene', value);
+    } else {
+      params.delete('terpene');
+    }
+    updateURL(params);
+  });
+
+  // Sort Order
+  const sortOrder = document.getElementById('sort-order') as HTMLSelectElement;
+  sortOrder?.addEventListener('change', (e) => {
+    const params = new URLSearchParams(window.location.search);
+    const value = (e.target as HTMLSelectElement).value;
+    if (value) {
+      params.set('sort', value);
+    } else {
+      params.delete('sort');
+    }
+    updateURL(params);
+  });
+</script>

@@ -1,0 +1,124 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import Header from '../../../components/Header.astro';
+import Footer from '../../../components/Footer.astro';
+import { strains } from '../../../data/strains';
+
+export function getStaticPaths() {
+  return strains.map(strain => ({
+    params: { strain: strain.name.toLowerCase().replace(/\s+/g, '-') },
+    props: { strain }
+  }));
+}
+
+const { strain } = Astro.props;
+---
+
+<Layout title={`${strain.name} Reviews and Ratings - CannaGuide`}>
+  <Header />
+  
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div class="grid md:grid-cols-2 gap-12">
+      <div class="md:sticky md:top-8 h-fit">
+        <div class="relative rounded-lg overflow-hidden shadow-[0_8px_25px_rgba(75,175,100,0.25)]">
+          <div class="absolute inset-0 bg-gradient-to-t from-primary-500/20 to-transparent"></div>
+          <img 
+            src={strain.img_url || '/placeholder.png'} 
+            alt={strain.name}
+            class="w-full h-[500px] object-cover"
+          />
+        </div>
+      </div>
+
+      <div class="space-y-8">
+        <div>
+          <h1 class="text-4xl font-bold text-gray-900 mb-4">{strain.name} Reviews</h1>
+          <p class="text-xl text-gray-600 mb-8">Share your experience with {strain.name}</p>
+
+          <div class="bg-white rounded-lg shadow-lg p-8">
+            <h2 class="text-2xl font-bold text-gray-900 mb-6">Write a Review</h2>
+            <form class="space-y-6">
+              <div>
+                <label class="block text-sm font-medium text-gray-700">Overall Rating</label>
+                <div class="mt-2 flex items-center gap-2">
+                  {[1, 2, 3, 4, 5].map((rating) => (
+                    <button
+                      type="button"
+                      class="text-2xl text-gray-300 hover:text-primary-500 focus:outline-none transition-colors"
+                    >
+                      ★
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div class="grid grid-cols-2 gap-6">
+                <div>
+                  <label class="block text-sm font-medium text-gray-700">Effects</label>
+                  <select class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500">
+                    <option value="5">Excellent</option>
+                    <option value="4">Very Good</option>
+                    <option value="3">Good</option>
+                    <option value="2">Fair</option>
+                    <option value="1">Poor</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label class="block text-sm font-medium text-gray-700">Taste</label>
+                  <select class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500">
+                    <option value="5">Excellent</option>
+                    <option value="4">Very Good</option>
+                    <option value="3">Good</option>
+                    <option value="2">Fair</option>
+                    <option value="1">Poor</option>
+                  </select>
+                </div>
+              </div>
+
+              <div>
+                <label class="block text-sm font-medium text-gray-700">Duration</label>
+                <select class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500">
+                  <option value="short">1-2 hours</option>
+                  <option value="medium">2-4 hours</option>
+                  <option value="long">4+ hours</option>
+                </select>
+              </div>
+
+              <div>
+                <label class="block text-sm font-medium text-gray-700">Your Review</label>
+                <textarea
+                  rows="4"
+                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500"
+                  placeholder="Share your experience with this strain..."
+                ></textarea>
+              </div>
+
+              <button
+                type="submit"
+                class="w-full bg-primary-600 text-white px-4 py-2 rounded-md hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 transition-colors"
+              >
+                Submit Review
+              </button>
+            </form>
+          </div>
+
+          <div class="mt-8 bg-white rounded-lg shadow-lg p-8">
+            <h2 class="text-2xl font-bold text-gray-900 mb-6">Recent Reviews</h2>
+            <div class="text-center text-gray-500 py-8">
+              No reviews yet. Be the first to review {strain.name}!
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <Footer />
+</Layout>
+
+<style>
+  button[type="button"]:hover ~ button {
+    @apply text-gray-300;
+  }
+</style>

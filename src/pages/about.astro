@@ -1,0 +1,96 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { Users, Database, Shield, Award } from 'lucide-astro';
+---
+
+<Layout 
+  title="About Us - Budprofiles.com"
+  description="Learn about Budprofiles.com's mission to provide accurate and comprehensive cannabis strain information."
+>
+  <Header />
+  
+  <main>
+    <section class="bg-gradient-to-br from-primary-600 to-primary-800 py-20">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <h1 class="text-4xl font-bold text-white mb-4">About Budprofiles.com</h1>
+        <p class="text-xl text-white/90 max-w-2xl mx-auto">
+          Your trusted source for comprehensive cannabis strain information and education
+        </p>
+      </div>
+    </section>
+
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div class="grid md:grid-cols-2 gap-12">
+        <div class="space-y-6">
+          <h2 class="text-3xl font-bold text-gray-900">Our Mission</h2>
+          <p class="text-lg text-gray-600">
+            At Budprofiles.com, we're dedicated to providing accurate, comprehensive, and accessible
+            information about cannabis strains. Our goal is to help both medical patients and
+            recreational users make informed decisions about their cannabis consumption.
+          </p>
+          <p class="text-lg text-gray-600">
+            We believe that education and transparency are key to responsible cannabis use.
+            Through our platform, we aim to break down stigmas and promote understanding of
+            this remarkable plant.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-2 gap-6">
+          <div class="bg-white rounded-lg shadow-lg p-6 flex flex-col items-center text-center">
+            <Users class="w-12 h-12 text-primary-600 mb-4" />
+            <h3 class="text-xl font-bold text-gray-900 mb-2">Community Driven</h3>
+            <p class="text-gray-600">Built on user experiences and feedback</p>
+          </div>
+          <div class="bg-white rounded-lg shadow-lg p-6 flex flex-col items-center text-center">
+            <Database class="w-12 h-12 text-primary-600 mb-4" />
+            <h3 class="text-xl font-bold text-gray-900 mb-2">Data Focused</h3>
+            <p class="text-gray-600">Research-backed strain information</p>
+          </div>
+          <div class="bg-white rounded-lg shadow-lg p-6 flex flex-col items-center text-center">
+            <Shield class="w-12 h-12 text-primary-600 mb-4" />
+            <h3 class="text-xl font-bold text-gray-900 mb-2">Trusted Source</h3>
+            <p class="text-gray-600">Verified and accurate content</p>
+          </div>
+          <div class="bg-white rounded-lg shadow-lg p-6 flex flex-col items-center text-center">
+            <Award class="w-12 h-12 text-primary-600 mb-4" />
+            <h3 class="text-xl font-bold text-gray-900 mb-2">Expert Team</h3>
+            <p class="text-gray-600">Cannabis industry professionals</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="bg-gray-50 py-12">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 class="text-3xl font-bold text-gray-900 mb-8 text-center">Our Values</h2>
+        <div class="grid md:grid-cols-3 gap-8">
+          <div class="bg-white rounded-lg shadow-lg p-8">
+            <h3 class="text-xl font-bold text-gray-900 mb-4">Accuracy</h3>
+            <p class="text-gray-600">
+              We verify all information through multiple sources and regularly update our database
+              to ensure accuracy and reliability.
+            </p>
+          </div>
+          <div class="bg-white rounded-lg shadow-lg p-8">
+            <h3 class="text-xl font-bold text-gray-900 mb-4">Education</h3>
+            <p class="text-gray-600">
+              We believe in empowering users through knowledge, providing detailed information
+              about effects, benefits, and potential risks.
+            </p>
+          </div>
+          <div class="bg-white rounded-lg shadow-lg p-8">
+            <h3 class="text-xl font-bold text-gray-900 mb-4">Responsibility</h3>
+            <p class="text-gray-600">
+              We promote responsible cannabis use and provide resources for making informed
+              decisions about consumption.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</Layout>

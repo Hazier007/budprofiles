@@ -1,0 +1,46 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import Header from '../../../components/Header.astro';
+import Footer from '../../../components/Footer.astro';
+import StrainGrid from '../../../components/StrainGrid.astro';
+import StrainTypeHero from '../../../components/StrainTypeHero.astro';
+import StrainFilters from '../../../components/StrainFilters.astro';
+import { strains } from '../../../data/strains';
+import { filterStrains } from '../../../utils/strainFilters';
+
+export function getStaticPaths() {
+  const types = [...new Set(strains.map(strain => strain.type))];
+  return types.map(type => ({
+    params: { type: type.toLowerCase() },
+    props: { type }
+  }));
+}
+
+const { type } = Astro.props;
+const { terpene, sort } = Astro.url.searchParams;
+
+// Get all available terpenes
+const terpenes = [...new Set(strains.map(strain => strain.most_common_terpene))];
+
+// Filter strains
+let typeStrains = strains.filter(strain => strain.type === type);
+typeStrains = filterStrains(typeStrains, undefined, terpene, sort);
+---
+
+<Layout title={`${type} Cannabis Strains - Budprofiles.com`}>
+  <Header />
+  <StrainTypeHero type={type} />
+  
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <StrainFilters
+      types={[type]}
+      terpenes={terpenes}
+      activeType={type}
+      activeTerpene={terpene}
+      activeSort={sort}
+    />
+    <StrainGrid strains={typeStrains} />
+  </main>
+
+  <Footer />
+</Layout>

@@ -1,0 +1,104 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import { strains } from '../../data/strains';
+
+const terpeneInfo = {
+  Caryophyllene: {
+    aroma: 'Peppery, spicy, woody',
+    benefits: 'Anti-inflammatory and analgesic properties',
+    description: 'A unique terpene that can interact with the endocannabinoid system, potentially offering pain relief and anti-anxiety effects.',
+    found_in: 'Black pepper, cloves, cinnamon'
+  },
+  Limonene: {
+    aroma: 'Citrus, lemon, orange',
+    benefits: 'Mood elevation and stress relief',
+    description: 'Known for its uplifting effects and potential anti-anxiety properties. May help with stress reduction and mood enhancement.',
+    found_in: 'Citrus fruit peels, juniper, peppermint'
+  },
+  Myrcene: {
+    aroma: 'Earthy, musky, clove-like',
+    benefits: 'Sedative and muscle-relaxing effects',
+    description: 'The most common terpene found in cannabis, known for its sedating effects and potential pain-relieving properties.',
+    found_in: 'Mangoes, hops, thyme, lemongrass'
+  }
+};
+
+// Group strains by terpene
+const terpeneStrains = strains.reduce((acc, strain) => {
+  const terpene = strain.most_common_terpene;
+  if (!acc[terpene]) acc[terpene] = [];
+  acc[terpene].push(strain);
+  return acc;
+}, {});
+---
+
+<Layout title="Cannabis Terpenes Guide - CannaGuide">
+  <Header />
+  
+  <main>
+    <section class="bg-gradient-to-br from-primary-600 to-primary-800 py-20">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <h1 class="text-4xl font-bold text-white mb-4">Cannabis Terpenes Guide</h1>
+        <p class="text-xl text-white/90">Discover the aromatic compounds that give cannabis its unique properties</p>
+      </div>
+    </section>
+
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        {Object.entries(terpeneInfo).map(([terpene, info]) => (
+          <div class="bg-white rounded-lg shadow-lg overflow-hidden group hover:shadow-xl transition-all duration-300">
+            <div class="p-6 space-y-6">
+              <h2 class="text-2xl font-bold text-gray-900 group-hover:text-primary-600 transition-colors">
+                {terpene}
+              </h2>
+              
+              <div class="space-y-4">
+                <div class="bg-primary-50 rounded-lg p-4">
+                  <h3 class="font-semibold text-gray-900 mb-2">Aroma Profile</h3>
+                  <p class="text-gray-700">{info.aroma}</p>
+                </div>
+
+                <div class="bg-primary-50 rounded-lg p-4">
+                  <h3 class="font-semibold text-gray-900 mb-2">Key Benefits</h3>
+                  <p class="text-gray-700">{info.benefits}</p>
+                </div>
+
+                <div>
+                  <h3 class="font-semibold text-gray-900 mb-2">Popular Strains</h3>
+                  <ul class="space-y-2">
+                    {terpeneStrains[terpene]?.slice(0, 3).map(strain => (
+                      <li>
+                        <a 
+                          href={`/strains/${strain.name.toLowerCase().replace(/\s+/g, '-')}`}
+                          class="text-primary-600 hover:text-primary-700"
+                        >
+                          {strain.name}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div class="pt-4">
+                  <a 
+                    href={`/terpenes/${terpene.toLowerCase()}`}
+                    class="inline-flex items-center text-primary-600 hover:text-primary-700 font-medium"
+                  >
+                    Learn more about {terpene}
+                    <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                    </svg>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</Layout>

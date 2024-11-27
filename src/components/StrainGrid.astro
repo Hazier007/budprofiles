@@ -1,0 +1,16 @@
+---
+import type { Strain } from '../types/strain';
+import StrainCard from './StrainCard.astro';
+
+interface Props {
+  strains: Strain[];
+}
+
+const { strains } = Astro.props;
+---
+
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+  {strains.map(strain => (
+    <StrainCard strain={strain} />
+  ))}
+</div>

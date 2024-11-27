@@ -1,0 +1,55 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import Header from '../../../components/Header.astro';
+import Footer from '../../../components/Footer.astro';
+import StrainGrid from '../../../components/StrainGrid.astro';
+import { strains } from '../../../data/strains';
+
+export function getStaticPaths() {
+  const terpenes = [...new Set(strains.map(strain => strain.most_common_terpene))];
+  return terpenes.map(terpene => ({
+    params: { terpene: terpene.toLowerCase() },
+    props: { 
+      terpene,
+      filteredStrains: strains.filter(strain => strain.most_common_terpene === terpene)
+    },
+  }));
+}
+
+const { terpene, filteredStrains } = Astro.props;
+
+const terpeneInfo = {
+  Caryophyllene: {
+    aroma: 'Peppery, spicy, woody',
+    benefits: 'Anti-inflammatory and analgesic properties',
+  },
+  Limonene: {
+    aroma: 'Citrus, lemon, orange',
+    benefits: 'Mood elevation and stress relief',
+  },
+  Myrcene: {
+    aroma: 'Earthy, musky, clove-like',
+    benefits: 'Sedative and muscle-relaxing effects',
+  }
+};
+---
+
+<Layout title={`${terpene} Cannabis Strains - CannaGuide`}>
+  <Header />
+  
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div class="text-center mb-12">
+      <h1 class="text-4xl font-bold text-gray-900 mb-4">
+        {terpene} Dominant Strains
+      </h1>
+      <div class="text-xl text-gray-600 max-w-3xl mx-auto space-y-4">
+        <p>Aroma: {terpeneInfo[terpene]?.aroma}</p>
+        <p>Benefits: {terpeneInfo[terpene]?.benefits}</p>
+      </div>
+    </div>
+
+    <StrainGrid strains={filteredStrains} />
+  </main>
+
+  <Footer />
+</Layout>

@@ -1,0 +1,212 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import { strains } from '../../data/strains';
+import { Info, Leaf, Activity, AlertTriangle, Clock, Star } from 'lucide-astro';
+
+export async function getStaticPaths() {
+  return strains.map(strain => ({
+    params: { strain: strain.name.toLowerCase().replace(/\s+/g, '-') },
+    props: { strain },
+  }));
+}
+
+const { strain } = Astro.props;
+
+const positiveEffects = Object.entries(strain.effects.positive)
+  .sort(([,a], [,b]) => b - a);
+const negativeEffects = Object.entries(strain.effects.negative)
+  .sort(([,a], [,b]) => b - a);
+const medicalEffects = Object.entries(strain.effects.medical)
+  .sort(([,a], [,b]) => b - a)
+  .map(([effect, percentage]) => [
+    effect.replace(/_/g, ' '),
+    percentage
+  ]);
+
+const relatedStrains = strains
+  .filter(s => s.type === strain.type && s.name !== strain.name)
+  .slice(0, 3);
+
+const seoDescription = `Learn about ${strain.name}, a ${strain.type} cannabis strain with ${strain.thc_level} THC. Discover its effects, medical benefits, and user experiences.`;
+---
+
+<Layout 
+  title={`${strain.name} Strain Information - Budprofiles`}
+  description={seoDescription}
+>
+  <Header />
+  
+  <main class="min-h-screen bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div class="grid lg:grid-cols-2 gap-12">
+        {/* Left Column - Sticky Image */}
+        <div class="lg:sticky lg:top-8 h-fit space-y-6">
+          <div class="relative rounded-2xl overflow-hidden shadow-[0_8px_25px_rgba(75,175,100,0.25)] group">
+            <div class="absolute inset-0 bg-gradient-to-t from-primary-500/30 to-transparent z-10"></div>
+            <img 
+              src={strain.img_url || '/placeholder.jpg'} 
+              alt={strain.name}
+              class="w-full h-[600px] object-cover transform transition-transform duration-700 group-hover:scale-110"
+            />
+            <div class="absolute bottom-0 left-0 right-0 p-8 bg-gradient-to-t from-black/80 via-black/40 to-transparent z-20">
+              <h1 class="text-4xl font-bold text-white mb-4">{strain.name}</h1>
+              <div class="flex flex-wrap gap-3">
+                <span class="inline-flex items-center px-4 py-2 rounded-full text-sm font-medium bg-primary-500/80 text-white backdrop-blur-sm">
+                  <Leaf class="w-4 h-4 mr-2" /> {strain.type}
+                </span>
+                <span class="inline-flex items-center px-4 py-2 rounded-full text-sm font-medium bg-primary-500/80 text-white backdrop-blur-sm">
+                  <Activity class="w-4 h-4 mr-2" /> THC: {strain.thc_level}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-white rounded-xl shadow-lg p-6">
+            <h2 class="text-xl font-bold text-gray-900 mb-4 flex items-center">
+              <Info class="w-5 h-5 mr-2 text-primary-600" /> Quick Facts
+            </h2>
+            <div class="grid grid-cols-2 gap-4">
+              <div class="p-4 bg-primary-50 rounded-lg">
+                <span class="block text-sm font-medium text-gray-600">Dominant Terpene</span>
+                <span class="text-lg font-semibold text-primary-700">{strain.most_common_terpene}</span>
+              </div>
+              <div class="p-4 bg-primary-50 rounded-lg">
+                <span class="block text-sm font-medium text-gray-600">Category</span>
+                <span class="text-lg font-semibold text-primary-700">{strain.type}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Right Column - Content */}
+        <div class="space-y-8">
+          <div class="bg-white rounded-xl shadow-lg p-8">
+            <h2 class="text-2xl font-bold text-gray-900 mb-4">About {strain.name}</h2>
+            <p class="text-gray-600 text-lg leading-relaxed">{strain.description}</p>
+          </div>
+
+          <div class="bg-white rounded-xl shadow-lg p-8">
+            <h2 class="text-2xl font-bold text-gray-900 mb-6 flex items-center">
+              <Star class="w-6 h-6 mr-2 text-primary-600" /> Effects
+            </h2>
+            <div class="space-y-8">
+              {positiveEffects.map(([effect, percentage]) => (
+                <div class="relative">
+                  <div class="flex justify-between mb-2">
+                    <span class="text-lg font-medium text-gray-700 capitalize">{effect}</span>
+                    <span class="text-primary-600 font-semibold">{percentage}%</span>
+                  </div>
+                  <div class="h-3 bg-primary-100 rounded-full overflow-hidden">
+                    <div 
+                      class="h-full bg-gradient-to-r from-primary-500 to-primary-600 rounded-full transition-all duration-1000 ease-out"
+                      style={`width: ${percentage}%`}
+                    >
+                      <div class="absolute top-0 right-0 h-full w-8 bg-gradient-to-r from-transparent to-white/20"></div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div class="bg-white rounded-xl shadow-lg p-8">
+            <h2 class="text-2xl font-bold text-gray-900 mb-6 flex items-center">
+              <Activity class="w-6 h-6 mr-2 text-primary-600" /> Medical Benefits
+            </h2>
+            <div class="grid grid-cols-2 gap-4">
+              {medicalEffects.map(([effect, percentage]) => (
+                <div class="bg-primary-50 rounded-lg p-4 transform hover:scale-105 transition-transform duration-300">
+                  <div class="text-lg font-medium text-gray-900 capitalize mb-2">{effect}</div>
+                  <div class="text-primary-600 font-semibold">{percentage}%</div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div class="bg-white rounded-xl shadow-lg p-8">
+            <h2 class="text-2xl font-bold text-gray-900 mb-6 flex items-center">
+              <AlertTriangle class="w-6 h-6 mr-2 text-primary-600" /> Potential Side Effects
+            </h2>
+            <div class="grid grid-cols-2 gap-4">
+              {negativeEffects.map(([effect, percentage]) => (
+                <div class="bg-red-50 rounded-lg p-4">
+                  <div class="text-lg font-medium text-gray-900 capitalize mb-2">
+                    {effect.replace(/_/g, ' ')}
+                  </div>
+                  <div class="text-red-600 font-semibold">{percentage}%</div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {relatedStrains.length > 0 && (
+            <div class="bg-white rounded-xl shadow-lg p-8">
+              <h2 class="text-2xl font-bold text-gray-900 mb-6">Similar Strains</h2>
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {relatedStrains.map(related => (
+                  <a 
+                    href={`/strains/${related.name.toLowerCase().replace(/\s+/g, '-')}`}
+                    class="group"
+                  >
+                    <div class="relative rounded-lg overflow-hidden shadow-md">
+                      <img 
+                        src={related.img_url || '/placeholder.jpg'} 
+                        alt={related.name}
+                        class="w-full h-48 object-cover transform transition-transform duration-500 group-hover:scale-110"
+                      />
+                      <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+                      <div class="absolute bottom-0 left-0 right-0 p-4">
+                        <h3 class="text-lg font-semibold text-white">{related.name}</h3>
+                        <p class="text-white/80 text-sm">{related.thc_level} THC</p>
+                      </div>
+                    </div>
+                  </a>
+                ))}
+              </div>
+            </div>
+          )}
+
+          <div class="flex gap-4">
+            <a 
+              href={`/strains/${strain.name.toLowerCase().replace(/\s+/g, '-')}/reviews`}
+              class="flex-1 bg-primary-600 text-white px-6 py-3 rounded-lg text-center font-medium hover:bg-primary-700 transition-colors"
+            >
+              Read Reviews
+            </a>
+            <a 
+              href={`/strains/${strain.name.toLowerCase().replace(/\s+/g, '-')}/effects`}
+              class="flex-1 bg-white text-primary-600 px-6 py-3 rounded-lg text-center font-medium border-2 border-primary-600 hover:bg-primary-50 transition-colors"
+            >
+              Detailed Effects
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <Footer />
+</Layout>
+
+<style>
+  @keyframes slideIn {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+
+  .bg-white {
+    animation: slideIn 0.5s ease-out forwards;
+  }
+
+  @keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+  }
+
+  .group:hover img {
+    animation: pulse 2s infinite;
+  }
+</style>

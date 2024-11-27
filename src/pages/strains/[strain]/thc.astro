@@ -1,0 +1,100 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import Header from '../../../components/Header.astro';
+import Footer from '../../../components/Footer.astro';
+import { strains } from '../../../data/strains';
+
+export function getStaticPaths() {
+  return strains.map(strain => ({
+    params: { strain: strain.name.toLowerCase().replace(/\s+/g, '-') },
+    props: { strain }
+  }));
+}
+
+const { strain } = Astro.props;
+
+const thcLevel = parseInt(strain.thc_level);
+let thcCategory;
+if (thcLevel < 15) thcCategory = 'mild';
+else if (thcLevel < 20) thcCategory = 'moderate';
+else thcCategory = 'potent';
+---
+
+<Layout title={`${strain.name} THC Content and Potency Guide - CannaGuide`}>
+  <Header />
+  
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div class="grid md:grid-cols-2 gap-12">
+      <div class="md:sticky md:top-8 h-fit">
+        <div class="relative rounded-lg overflow-hidden shadow-[0_8px_25px_rgba(75,175,100,0.25)]">
+          <div class="absolute inset-0 bg-gradient-to-t from-primary-500/20 to-transparent"></div>
+          <img 
+            src={strain.img_url || '/placeholder.png'} 
+            alt={strain.name}
+            class="w-full h-[500px] object-cover"
+          />
+        </div>
+      </div>
+
+      <div class="space-y-8">
+        <div>
+          <h1 class="text-4xl font-bold text-gray-900 mb-4">{strain.name} THC Content</h1>
+          <div class="inline-flex items-center px-4 py-2 rounded-full text-lg font-medium bg-primary-100 text-primary-800 mb-8">
+            THC Level: {strain.thc_level}
+          </div>
+
+          <div class="bg-white rounded-lg shadow-lg p-8 space-y-6">
+            <div class="flex items-center justify-between">
+              <span class="text-lg font-medium text-gray-700">Potency Category</span>
+              <span class="text-xl font-bold text-primary-600 capitalize">{thcCategory}</span>
+            </div>
+
+            <div class="relative pt-1">
+              <div class="flex mb-2 items-center justify-between">
+                <div>
+                  <span class="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-primary-600 bg-primary-200">
+                    Strength
+                  </span>
+                </div>
+              </div>
+              <div class="overflow-hidden h-2 mb-4 text-xs flex rounded bg-primary-200">
+                <div
+                  style={`width: ${thcLevel * 5}%`}
+                  class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-primary-500"
+                ></div>
+              </div>
+            </div>
+
+            <div class="prose max-w-none">
+              <h2 class="text-2xl font-bold text-gray-900 mb-4">About {strain.name}'s THC Content</h2>
+              <p class="text-gray-600 leading-relaxed">
+                {strain.name} contains {strain.thc_level} THC, making it a {thcCategory} strain. 
+                {thcCategory === 'mild' && 'This lower THC content makes it suitable for beginners or those seeking mild effects.'}
+                {thcCategory === 'moderate' && 'This moderate THC level provides balanced effects suitable for regular consumers.'}
+                {thcCategory === 'potent' && 'This high THC content makes it more suitable for experienced consumers.'}
+              </p>
+            </div>
+
+            <div class="mt-8">
+              <h3 class="text-xl font-bold text-gray-900 mb-4">Effects at this THC Level</h3>
+              <div class="grid grid-cols-2 gap-4">
+                {Object.entries(strain.effects.positive)
+                  .sort(([,a], [,b]) => b - a)
+                  .slice(0, 4)
+                  .map(([effect, percentage]) => (
+                    <div class="bg-primary-50 rounded-lg p-4">
+                      <div class="text-lg font-medium text-gray-900 capitalize mb-2">{effect}</div>
+                      <div class="text-primary-600 font-semibold">{percentage}%</div>
+                    </div>
+                  ))
+                }
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <Footer />
+</Layout>

@@ -1,0 +1,53 @@
+---
+import { Leaf } from 'lucide-astro';
+---
+
+<div id="cookie-consent" class="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md shadow-lg transform translate-y-full transition-transform duration-500 z-50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+    <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <Leaf class="w-8 h-8 text-primary-600" />
+        <p class="text-gray-600">
+          We use cookies to enhance your experience. By continuing to visit this site, you agree to our use of cookies.
+        </p>
+      </div>
+      <div class="flex gap-4">
+        <button
+          id="accept-cookies"
+          class="px-6 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
+        >
+          Accept
+        </button>
+        <button
+          id="decline-cookies"
+          class="px-6 py-2 border-2 border-primary-600 text-primary-600 rounded-lg hover:bg-primary-50 transition-colors"
+        >
+          Decline
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const cookieConsent = document.getElementById('cookie-consent');
+  const acceptButton = document.getElementById('accept-cookies');
+  const declineButton = document.getElementById('decline-cookies');
+
+  // Show cookie consent if not previously accepted
+  if (!localStorage.getItem('cookieConsent')) {
+    setTimeout(() => {
+      cookieConsent?.classList.remove('translate-y-full');
+    }, 1000);
+  }
+
+  acceptButton?.addEventListener('click', () => {
+    localStorage.setItem('cookieConsent', 'accepted');
+    cookieConsent?.classList.add('translate-y-full');
+  });
+
+  declineButton?.addEventListener('click', () => {
+    localStorage.setItem('cookieConsent', 'declined');
+    cookieConsent?.classList.add('translate-y-full');
+  });
+</script>

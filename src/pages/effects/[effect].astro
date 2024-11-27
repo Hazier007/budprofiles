@@ -1,0 +1,67 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import StrainGrid from '../../components/StrainGrid.astro';
+import StrainFilters from '../../components/StrainFilters';
+import { strains } from '../../data/strains';
+import { filterStrains } from '../../utils/strainFilters';
+
+export function getStaticPaths() {
+  const allEffects = new Set();
+  strains.forEach(strain => {
+    Object.keys(strain.effects.positive).forEach(effect => allEffects.add(effect));
+  });
+
+  return Array.from(allEffects).map(effect => ({
+    params: { effect },
+    props: { effect }
+  }));
+}
+
+const { effect } = Astro.props;
+const { type, terpene, sort } = Astro.url.searchParams;
+
+// Get all available types and terpenes
+const types = [...new Set(strains.map(strain => strain.type))];
+const terpenes = [...new Set(strains.map(strain => strain.most_common_terpene))];
+
+// Filter strains for this effect
+let effectStrains = strains
+  .filter(strain => strain.effects.positive[effect])
+  .sort((a, b) => b.effects.positive[effect] - a.effects.positive[effect]);
+
+// Apply additional filters and sorting
+effectStrains = filterStrains(effectStrains, type, terpene, sort);
+---
+
+<Layout title={`${effect.charAt(0).toUpperCase() + effect.slice(1)} Cannabis Strains - Budprofiles.com`}>
+  <Header />
+  
+  <section class="bg-gradient-to-br from-primary-600 to-primary-800 py-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <h1 class="text-4xl font-bold text-white mb-4 capitalize">{effect} Strains</h1>
+      <p class="text-xl text-white/90">
+        Discover cannabis strains known for their {effect.toLowerCase()} effects
+      </p>
+    </div>
+  </section>
+
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <StrainFilters
+      client:load
+      types={types}
+      terpenes={terpenes}
+      activeType={type}
+      activeTerpene={terpene}
+      activeSort={sort}
+    />
+
+    <div class="mb-12">
+      <h2 class="text-2xl font-bold text-gray-900 mb-4">Top Strains for {effect}</h2>
+      <StrainGrid strains={effectStrains} />
+    </div>
+  </main>
+
+  <Footer />
+</Layout>

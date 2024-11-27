@@ -1,0 +1,21 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import Header from '../../../components/Header.astro';
+import Footer from '../../../components/Footer.astro';
+import StrainGrid from '../../../components/StrainGrid.astro';
+import StrainTypeHero from '../../../components/StrainTypeHero.astro';
+import { strains } from '../../../data/strains';
+
+const indicaStrains = strains.filter(strain => strain.type === 'Indica');
+---
+
+<Layout title="Indica Cannabis Strains - CannaGuide">
+  <Header />
+  <StrainTypeHero type="Indica" />
+  
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <StrainGrid strains={indicaStrains} />
+  </main>
+
+  <Footer />
+</Layout>

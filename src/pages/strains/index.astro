@@ -1,0 +1,51 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import SearchBar from '../../components/SearchBar.astro';
+import StrainGrid from '../../components/StrainGrid.astro';
+import { strains } from '../../data/strains';
+
+const strainTypes = ['Indica', 'Sativa', 'Hybrid'];
+---
+
+<Layout title="Cannabis Strains Directory - CannaGuide">
+  <Header />
+  
+  <main>
+    <section class="bg-gradient-to-br from-primary-600 to-primary-800 py-20">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-8">
+          <h1 class="text-4xl font-bold text-white mb-4">Explore Cannabis Strains</h1>
+          <p class="text-xl text-white/90">Find detailed information about various cannabis strains</p>
+        </div>
+        <SearchBar />
+      </div>
+    </section>
+
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+        {strainTypes.map(type => (
+          <a 
+            href={`/strains/type/${type.toLowerCase()}`}
+            class="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow group"
+          >
+            <h2 class="text-2xl font-bold text-gray-900 mb-2 group-hover:text-primary-600 transition-colors">
+              {type} Strains
+            </h2>
+            <p class="text-gray-600">
+              {type === 'Indica' && 'Relaxing and calming effects, perfect for evening use'}
+              {type === 'Sativa' && 'Energizing and uplifting effects, ideal for daytime use'}
+              {type === 'Hybrid' && 'Balanced effects combining the best of both worlds'}
+            </p>
+          </a>
+        ))}
+      </div>
+
+      <h2 class="text-3xl font-bold text-gray-900 mb-8">Popular Strains</h2>
+      <StrainGrid strains={strains} />
+    </section>
+  </main>
+
+  <Footer />
+</Layout>

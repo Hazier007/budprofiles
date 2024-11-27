@@ -1,0 +1,44 @@
+---
+const currentYear = new Date().getFullYear();
+---
+
+<footer class="bg-gray-50 border-t border-gray-200">
+  <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+      <div>
+        <h3 class="text-sm font-semibold text-gray-600 tracking-wider uppercase">Strains</h3>
+        <ul class="mt-4 space-y-4">
+          <li><a href="/strains/indica" class="text-gray-500 hover:text-primary-600">Indica</a></li>
+          <li><a href="/strains/sativa" class="text-gray-500 hover:text-primary-600">Sativa</a></li>
+          <li><a href="/strains/hybrid" class="text-gray-500 hover:text-primary-600">Hybrid</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="text-sm font-semibold text-gray-600 tracking-wider uppercase">Effects</h3>
+        <ul class="mt-4 space-y-4">
+          <li><a href="/effects/relaxed" class="text-gray-500 hover:text-primary-600">Relaxed</a></li>
+          <li><a href="/effects/happy" class="text-gray-500 hover:text-primary-600">Happy</a></li>
+          <li><a href="/effects/euphoric" class="text-gray-500 hover:text-primary-600">Euphoric</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="text-sm font-semibold text-gray-600 tracking-wider uppercase">Medical</h3>
+        <ul class="mt-4 space-y-4">
+          <li><a href="/medical/stress" class="text-gray-500 hover:text-primary-600">Stress</a></li>
+          <li><a href="/medical/pain" class="text-gray-500 hover:text-primary-600">Pain</a></li>
+          <li><a href="/medical/anxiety" class="text-gray-500 hover:text-primary-600">Anxiety</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="text-sm font-semibold text-gray-600 tracking-wider uppercase">Legal</h3>
+        <ul class="mt-4 space-y-4">
+          <li><a href="/privacy" class="text-gray-500 hover:text-primary-600">Privacy</a></li>
+          <li><a href="/terms" class="text-gray-500 hover:text-primary-600">Terms</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="mt-8 border-t border-gray-200 pt-8 text-center">
+      <p class="text-gray-400 text-sm">© {currentYear} Budprofiles.com. All rights reserved.</p>
+    </div>
+  </div>
+</footer>

@@ -1,0 +1,117 @@
+---
+import CookieConsent from '../components/CookieConsent.astro';
+
+interface Props {
+  title: string;
+  description?: string;
+  canonicalUrl?: string;
+  ogImage?: string;
+  noindex?: boolean;
+}
+
+const { title, description, canonicalUrl, ogImage, noindex } = Astro.props;
+const defaultDescription = "Explore comprehensive cannabis strain information, effects, and medical benefits at Budprofiles.com - Your trusted source for strain research and comparisons.";
+const siteUrl = "https://budprofiles.com";
+const defaultOgImage = "/images/budprofiles-og.jpg";
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="description" content={description || defaultDescription} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="canonical" href={canonicalUrl || siteUrl} />
+    
+    <!-- Open Graph / Social Media -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Budprofiles.com" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description || defaultDescription} />
+    <meta property="og:image" content={ogImage || defaultOgImage} />
+    <meta property="og:url" content={canonicalUrl || siteUrl} />
+    
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description || defaultDescription} />
+    <meta name="twitter:image" content={ogImage || defaultOgImage} />
+    
+    <!-- Additional SEO -->
+    {noindex ? (
+      <meta name="robots" content="noindex, nofollow" />
+    ) : (
+      <meta name="robots" content="index, follow" />
+    )}
+    <meta name="generator" content={Astro.generator} />
+    <meta name="keywords" content="cannabis strains, marijuana effects, THC levels, terpenes, medical cannabis" />
+    
+    <title>{title} | Budprofiles.com - Cannabis Strain Information</title>
+
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "Budprofiles.com",
+        "url": "https://budprofiles.com",
+        "description": "Comprehensive cannabis strain information and comparison platform",
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": "https://budprofiles.com/search?q={search_term_string}",
+          "query-input": "required name=search_term_string"
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <slot />
+    <CookieConsent />
+  </body>
+</html>
+
+<style is:global>
+  :root {
+    --accent: 124, 58, 237;
+    --accent-gradient: linear-gradient(45deg, rgb(var(--accent)), #da62c4 30%, white 60%);
+  }
+  
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  html {
+    font-family: system-ui, sans-serif;
+    background-color: #f6f6f6;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    min-height: 100vh;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    color: #333;
+  }
+
+  /* Accessibility improvements */
+  :focus {
+    outline: 2px solid var(--primary-600);
+    outline-offset: 2px;
+  }
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+</style>
